@@ -8,9 +8,12 @@ import android.os.Looper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +26,7 @@ public class MainActivity extends Activity {
     private TextView batteryText;
     private TextView timeText;
     private TextView chargeText;
+    private TextView batteryIconText;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -50,24 +54,63 @@ public class MainActivity extends Activity {
         root.setBackgroundColor(Color.BLACK);
         root.setPadding(24, 24, 24, 24);
 
+        TextView titleText = new TextView(this);
+        titleText.setText("BATTERY DISPLAY");
+        titleText.setTextSize(24);
+        titleText.setGravity(Gravity.CENTER);
+        titleText.setTextColor(Color.WHITE);
+        titleText.setTypeface(Typeface.DEFAULT_BOLD);
+        titleText.setLetterSpacing(0.08f);
+
+        LinearLayout batteryRow = new LinearLayout(this);
+        batteryRow.setOrientation(LinearLayout.HORIZONTAL);
+        batteryRow.setGravity(Gravity.CENTER);
+
+        batteryIconText = new TextView(this);
+        batteryIconText.setText("BAT");
+        batteryIconText.setTextSize(34);
+        batteryIconText.setGravity(Gravity.CENTER);
+        batteryIconText.setTextColor(Color.WHITE);
+        batteryIconText.setTypeface(Typeface.DEFAULT_BOLD);
+        batteryIconText.setPadding(0, 0, 18, 0);
+
         batteryText = new TextView(this);
         batteryText.setTextSize(96);
         batteryText.setGravity(Gravity.CENTER);
         batteryText.setTextColor(Color.WHITE);
+        batteryText.setTypeface(Typeface.DEFAULT_BOLD);
+
+        batteryRow.addView(batteryIconText);
+        batteryRow.addView(batteryText);
 
         timeText = new TextView(this);
         timeText.setTextSize(34);
         timeText.setGravity(Gravity.CENTER);
         timeText.setTextColor(Color.WHITE);
+        timeText.setPadding(0, 18, 0, 8);
 
         chargeText = new TextView(this);
         chargeText.setTextSize(32);
         chargeText.setGravity(Gravity.CENTER);
         chargeText.setTextColor(Color.WHITE);
+        chargeText.setTypeface(Typeface.DEFAULT_BOLD);
+        chargeText.setPadding(0, 8, 0, 28);
 
-        root.addView(batteryText);
+        Button exitButton = new Button(this);
+        exitButton.setText("EXIT");
+        exitButton.setTextSize(18);
+        exitButton.setTextColor(Color.WHITE);
+        exitButton.setTypeface(Typeface.DEFAULT_BOLD);
+        exitButton.setAllCaps(false);
+        exitButton.setPadding(36, 12, 36, 12);
+        exitButton.setBackground(makeExitButtonBackground());
+        exitButton.setOnClickListener(v -> finishAndRemoveTask());
+
+        root.addView(titleText);
+        root.addView(batteryRow);
         root.addView(timeText);
         root.addView(chargeText);
+        root.addView(exitButton);
 
         setContentView(root);
     }
@@ -93,8 +136,9 @@ public class MainActivity extends Activity {
         if (batteryStatus == null) {
             batteryText.setText("--%");
             batteryText.setTextColor(Color.WHITE);
+            timeText.setText("TIME --:--:--");
             timeText.setTextColor(Color.WHITE);
-            chargeText.setText("CHARGE UNKNOWN");
+            chargeText.setText("PLUG CHARGE UNKNOWN");
             chargeText.setTextColor(Color.RED);
             return;
         }
@@ -117,17 +161,25 @@ public class MainActivity extends Activity {
         batteryText.setTextColor(getBatteryColor(percent));
 
         timeText.setText(
-                new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date())
+                "TIME " + new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date())
         );
         timeText.setTextColor(Color.WHITE);
 
         if (charging) {
-            chargeText.setText("CHARGE ON");
+            chargeText.setText("PLUG CHARGE ON");
             chargeText.setTextColor(Color.WHITE);
         } else {
-            chargeText.setText("CHARGE OFF");
+            chargeText.setText("PLUG CHARGE OFF");
             chargeText.setTextColor(Color.RED);
         }
+    }
+
+    private GradientDrawable makeExitButtonBackground() {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setColor(Color.rgb(40, 40, 40));
+        shape.setCornerRadius(28f);
+        shape.setStroke(2, Color.WHITE);
+        return shape;
     }
 
     private int getBatteryColor(int percent) {

@@ -67,8 +67,8 @@ public class MainActivity extends Activity {
         batteryRow.setGravity(Gravity.CENTER);
 
         batteryIconText = new TextView(this);
-        batteryIconText.setText("BAT");
-        batteryIconText.setTextSize(34);
+        batteryIconText.setText("🔋");
+        batteryIconText.setTextSize(42);
         batteryIconText.setGravity(Gravity.CENTER);
         batteryIconText.setTextColor(Color.WHITE);
         batteryIconText.setTypeface(Typeface.DEFAULT_BOLD);
@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
         chargeText.setPadding(0, 8, 0, 28);
 
         Button exitButton = new Button(this);
-        exitButton.setText("EXIT");
+        exitButton.setText("✕ EXIT");
         exitButton.setTextSize(18);
         exitButton.setTextColor(Color.WHITE);
         exitButton.setTypeface(Typeface.DEFAULT_BOLD);
@@ -136,9 +136,9 @@ public class MainActivity extends Activity {
         if (batteryStatus == null) {
             batteryText.setText("--%");
             batteryText.setTextColor(Color.WHITE);
-            timeText.setText("TIME --:--:--");
+            timeText.setText("🕒 --:--:--");
             timeText.setTextColor(Color.WHITE);
-            chargeText.setText("PLUG CHARGE UNKNOWN");
+            chargeText.setText("⚡ CHARGE UNKNOWN");
             chargeText.setTextColor(Color.RED);
             return;
         }
@@ -161,15 +161,15 @@ public class MainActivity extends Activity {
         batteryText.setTextColor(getBatteryColor(percent));
 
         timeText.setText(
-                "TIME " + new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date())
+                "🕒 " + new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date())
         );
         timeText.setTextColor(Color.WHITE);
 
         if (charging) {
-            chargeText.setText("PLUG CHARGE ON");
+            chargeText.setText("⚡ CHARGE ON");
             chargeText.setTextColor(Color.WHITE);
         } else {
-            chargeText.setText("PLUG CHARGE OFF");
+            chargeText.setText("⚡ CHARGE OFF");
             chargeText.setTextColor(Color.RED);
         }
     }
